@@ -250,7 +250,14 @@ pub(crate) mod util;
 
 pub use crate::transport::sealed::Transport;
 
-use std::{any::Any, error::Error, io, sync::Arc, time::Instant};
+use std::{any::Any, error::Error, io, sync::Arc};
+
+#[cfg(not(target_arch = "wasm32"))]
+use std::time::Instant;
+
+#[cfg(target_arch = "wasm32")]
+use wasmtimer::std::Instant;
+
 
 /// A message from a client to a server.
 #[derive(Debug)]

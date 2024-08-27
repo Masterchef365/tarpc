@@ -12,8 +12,14 @@ use crate::{
 };
 use futures::{task::*, Sink, Stream};
 use pin_project::pin_project;
-use std::{collections::VecDeque, io, pin::Pin, time::Instant};
+use std::{collections::VecDeque, io, pin::Pin};
 use tracing::Span;
+
+#[cfg(not(target_arch = "wasm32"))]
+use std::time::Instant;
+
+#[cfg(target_arch = "wasm32")]
+use wasmtimer::std::Instant;
 
 #[pin_project]
 pub(crate) struct FakeChannel<In, Out> {

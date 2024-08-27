@@ -7,8 +7,15 @@
 use std::{
     collections::HashMap,
     hash::{BuildHasher, Hash},
-    time::{Duration, Instant},
+    time::{Duration},
 };
+
+#[cfg(not(target_arch = "wasm32"))]
+use std::time::Instant;
+
+#[cfg(target_arch = "wasm32")]
+use wasmtimer::std::Instant;
+
 
 #[cfg(feature = "serde1")]
 #[cfg_attr(docsrs, doc(cfg(feature = "serde1")))]

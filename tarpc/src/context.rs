@@ -12,9 +12,17 @@ use opentelemetry::trace::TraceContextExt;
 use static_assertions::assert_impl_all;
 use std::{
     convert::TryFrom,
-    time::{Duration, Instant},
+    time::{Duration},
 };
 use tracing_opentelemetry::OpenTelemetrySpanExt;
+
+
+#[cfg(not(target_arch = "wasm32"))]
+use std::time::Instant;
+
+#[cfg(target_arch = "wasm32")]
+use wasmtimer::std::Instant;
+
 
 /// A request context that carries request-scoped information like deadlines and trace information.
 /// It is sent from client to server and is used by the server to enforce response deadlines.
