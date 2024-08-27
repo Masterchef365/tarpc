@@ -6,7 +6,13 @@ use std::{
     task::{Context, Poll},
     time::Instant,
 };
+
+#[cfg(not(target_arch = "wasm32"))]
 use tokio_util::time::delay_queue::{self, DelayQueue};
+
+#[cfg(target_arch = "wasm32")]
+use wasmtimer::tokio_util::delay_queue::{self, DelayQueue};
+
 use tracing::Span;
 
 /// A data structure that tracks in-flight requests. It aborts requests,

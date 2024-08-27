@@ -119,7 +119,7 @@ where
 {
     /// Sends a request to the dispatch task to forward to the server, returning a [`Future`] that
     /// resolves to the response.
-    #[tracing::instrument(
+    #[cfg_attr(not(target_arch="wasm32"), tracing::instrument(
         name = "RPC",
         skip(self, ctx, request),
         fields(
@@ -127,7 +127,7 @@ where
             rpc.deadline = %humantime::format_rfc3339(SystemTime::now() + ctx.deadline.time_until()),
             otel.kind = "client",
             otel.name = %request.name())
-        )]
+        ))]
     pub async fn call(&self, mut ctx: context::Context, request: Req) -> Result<Resp, RpcError> {
         let span = Span::current();
         ctx.trace_context = trace::Context::try_from(&span).unwrap_or_else(|_| {
