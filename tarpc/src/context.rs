@@ -49,7 +49,14 @@ pub struct Context {
 #[cfg(feature = "serde1")]
 mod absolute_to_relative_time {
     pub use serde::{Deserialize, Deserializer, Serialize, Serializer};
-    pub use std::time::{Duration, Instant};
+    pub use std::time::{Duration};
+
+    #[cfg(not(target_arch = "wasm32"))]
+    use std::time::Instant;
+
+    #[cfg(target_arch = "wasm32")]
+    use wasmtimer::std::Instant;
+
 
     pub fn serialize<S>(deadline: &Instant, serializer: S) -> Result<S::Ok, S::Error>
     where
